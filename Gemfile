@@ -20,6 +20,7 @@ gem 'bcrypt', '~> 3.1.7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+gem 'jwt'
 gem 'rest-client'
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -27,7 +28,6 @@ gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'config'
 gem 'ransack'
-gem 'rspec_api_documentation'
 gem 'rubocop'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
@@ -37,14 +37,17 @@ gem 'capistrano-bundler'
 gem 'capistrano-passenger'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv'
+gem 'open-uri'
 gem 'pry'
 gem 'pry-rails'
 gem 'rack-cors'
 gem 'spring'
+gem 'vcardigan'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'rspec_api_documentation'
   gem 'rspec-rails'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'

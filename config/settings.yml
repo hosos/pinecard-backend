@@ -1,3 +1,4 @@
 app:
+  host: https://www.pinecard.net
   telegram:
     bot_token: '1440461206:AAF15iVLBT00ujgIURDlDiJYYgEbcdWpemE'

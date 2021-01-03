@@ -1,0 +1,69 @@
+class MyCardsController < ApplicationController
+  before_action :set_my_card, only: %i[show update destroy]
+
+  # GET /my_cards
+  def index
+    @my_cards = current_user.my_cards
+
+    render json: @my_cards, include: '*.*.*'
+  end
+
+  # GET /my_cards/1
+  def show
+    render json: @my_card, include: '*.*.*'
+  end
+
+  # POST /my_cards
+  def create
+    @my_card = current_user.my_cards.new(my_card_params)
+
+    if @my_card.save
+      render json: @my_card, status: :created
+    else
+      render json: @my_card.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /my_cards/1
+  def update
+    if @my_card.update(my_card_params)
+      render json: @my_card
+    else
+      render json: @my_card.errors, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE /my_cards/1
+  def destroy
+    @my_card.destroy
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_my_card
+    @my_card = current_user.my_cards.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def my_card_params
+    params.permit(
+      :birthday,
+      :description,
+      :fullname,
+      :gender,
+      :name_prefix,
+      :organization,
+      :public,
+      :role,
+      :title,
+      emails_attributes: %i[id category value _destroy],
+      phones_attributes: %i[id category value _destroy],
+      addresses_attributes: %i[id category value _destroy],
+      website_urls_attributes: %i[id category value _destroy],
+      social_urls_attributes: %i[id category value _destroy],
+      hash_tags_attributes: %i[id value _destroy],
+      photos_attributes: %i[id image _destroy]
+    )
+  end
+end
