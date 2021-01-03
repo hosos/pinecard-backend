@@ -3,19 +3,22 @@ class MyCardsController < ApplicationController
 
   # GET /my_cards
   def index
-    @my_cards = current_user.my_cards
+    @my_cards = policy_scope(MyCard)
 
     render json: @my_cards, include: '*.*.*'
   end
 
   # GET /my_cards/1
   def show
+    authorize @my_card
+
     render json: @my_card, include: '*.*.*'
   end
 
   # POST /my_cards
   def create
     @my_card = current_user.my_cards.new(my_card_params)
+    authorize @my_card
 
     if @my_card.save
       render json: @my_card, status: :created
@@ -26,6 +29,8 @@ class MyCardsController < ApplicationController
 
   # PATCH/PUT /my_cards/1
   def update
+    authorize @my_card
+
     if @my_card.update(my_card_params)
       render json: @my_card
     else
@@ -35,7 +40,13 @@ class MyCardsController < ApplicationController
 
   # DELETE /my_cards/1
   def destroy
-    @my_card.destroy
+    authorize @my_card
+
+    if @my_card.destroy
+      head 204
+    else
+      render json: @my_card.errors, status: :unprocessable_entity
+    end
   end
 
   private

@@ -27,6 +27,7 @@ gem 'rest-client'
 gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'config'
+gem 'pundit'
 gem 'ransack'
 gem 'rubocop'
 

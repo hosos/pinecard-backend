@@ -206,6 +206,8 @@ GEM
       nio4r (~> 2.0)
     puma (5.1.1-java)
       nio4r (~> 2.0)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -376,6 +378,7 @@ DEPENDENCIES
   pry
   pry-rails
   puma (~> 5.0)
+  pundit
   rack-cors
   rails (~> 6.1.0)
   ransack

@@ -20,6 +20,7 @@ resource 'My Card' do
 
   let(:anthony) { TelegramAccount.create_or_login_with(tg_auth_data).user }
   let(:my_card) { anthony.primary_card }
+  let(:dog_card) { anthony.my_cards.create!(fullname: 'IT狗') }
 
   before do
     header 'authorization', "Bearer #{anthony.token}"
@@ -118,6 +119,22 @@ resource 'My Card' do
       expect(json_body['description']).to eq 'IT狗做到嘔'
       expect(json_body.dig('emails', 0, 'value')).to eq 'aaa@example.com'
       expect(json_body['photos'].count).to eq 2
+    end
+  end
+
+  delete '/my_cards/:id' do
+    let(:id) { my_card.id }
+
+    example 'cannot delete my primary card' do
+      do_request
+
+      expect(status).to eq 403
+    end
+
+    example 'delete my card' do
+      do_request(id: dog_card.id)
+
+      expect(status).to eq 204
     end
   end
 end

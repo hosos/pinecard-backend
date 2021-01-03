@@ -8,20 +8,25 @@ module ExceptionHandler
   class InvalidToken < StandardError; end
 
   included do
-    rescue_from ActiveRecord::RecordInvalid, with: :four_twenty_two
+    rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity
+    rescue_from Pundit::NotAuthorizedError, with: :forbidden
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
-    rescue_from ExceptionHandler::MissingToken, with: :four_twenty_two
-    rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
+    rescue_from ExceptionHandler::MissingToken, with: :unprocessable_entity
+    rescue_from ExceptionHandler::InvalidToken, with: :unprocessable_entity
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
   end
 
   private
 
+  def forbidden(e)
+    render json: { message: e.message }, status: :forbidden
+  end
+
   def not_found(e)
     render json: { message: e.message }, status: :not_found
   end
 
-  def four_twenty_two(e)
+  def unprocessable_entity(e)
     render json: { message: e.message }, status: :unprocessable_entity
   end
 
