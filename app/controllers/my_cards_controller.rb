@@ -12,16 +12,16 @@ class MyCardsController < ApplicationController
   def show
     authorize @my_card
 
-    render json: @my_card, include: '*.*.*'
+    render json: @my_card, include: '*.*.*', show_details: true
   end
 
   # POST /my_cards
   def create
-    @my_card = current_user.my_cards.new(my_card_params)
+    @my_card = policy_scope(MyCard).new(my_card_params)
     authorize @my_card
 
     if @my_card.save
-      render json: @my_card, status: :created
+      render json: @my_card, status: :created, show_details: true
     else
       render json: @my_card.errors, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class MyCardsController < ApplicationController
     authorize @my_card
 
     if @my_card.update(my_card_params)
-      render json: @my_card
+      render json: @my_card, show_details: true
     else
       render json: @my_card.errors, status: :unprocessable_entity
     end
@@ -59,15 +59,17 @@ class MyCardsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def my_card_params
     params.permit(
-      :birthday,
-      :description,
-      :fullname,
-      :gender,
-      :name_prefix,
-      :organization,
-      :public,
       :role,
       :title,
+      :gender,
+      :public,
+      :category,
+      :fullname,
+      :birthday,
+      :description,
+      :name_prefix,
+      :organization,
+      :auto_accept_request,
       emails_attributes: %i[id category value _destroy],
       phones_attributes: %i[id category value _destroy],
       addresses_attributes: %i[id category value _destroy],

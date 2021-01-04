@@ -35,8 +35,10 @@ resource 'My Card' do
       expect(my_card['fullname']).to eq 'A L'
       expect(my_card['primary']).to eq true
       expect(my_card['public']).to eq false
+      expect(my_card['category']).to eq 'intro'
+      expect(my_card['auto_accept_request']).to eq false
       expect(my_card['photos'].count).to eq 1
-      expect(my_card.dig('social_urls', 0, 'value')).to eq 'https://t.me/internal_server_error'
+      expect(my_card['social_urls']).to be_nil
     end
 
     example 'list my cards (no auth)' do
@@ -56,6 +58,7 @@ resource 'My Card' do
       expect(json_body['fullname']).to eq 'A L'
       expect(json_body['primary']).to eq true
       expect(json_body['public']).to eq false
+      expect(my_card['category']).to eq 'intro'
       expect(json_body['photos'].count).to eq 1
       expect(json_body.dig('social_urls', 0, 'value')).to eq 'https://t.me/internal_server_error'
     end
@@ -94,6 +97,7 @@ resource 'My Card' do
     parameter :organization
     parameter :public
     parameter :role
+    parameter :category
     parameter :emails_attributes
     parameter :phones_attributes
     parameter :addresses_attributes
@@ -104,19 +108,15 @@ resource 'My Card' do
 
     let(:id) { my_card.id }
     let(:description) { 'IT狗做到嘔' }
-    let(:emails_attributes) do
-      [{ category: 'work', value: 'aaa@example.com' }]
-    end
-
-    let(:photos_attributes) do
-      [{ image: photo_file }]
-    end
+    let(:category) { 'dating'}
+    let(:emails_attributes) { [{ category: 'work', value: 'aaa@example.com' }] }
+    let(:photos_attributes) { [{ image: photo_file }] }
 
     example 'update my card' do
       do_request
       json_body = JSON.parse(response_body)
-
       expect(json_body['description']).to eq 'IT狗做到嘔'
+      expect(json_body['category']).to eq 'dating'
       expect(json_body.dig('emails', 0, 'value')).to eq 'aaa@example.com'
       expect(json_body['photos'].count).to eq 2
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_03_100144) do
+ActiveRecord::Schema.define(version: 2021_01_04_151124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,17 @@ ActiveRecord::Schema.define(version: 2021_01_03_100144) do
     t.index ["my_card_id"], name: "index_addresses_on_my_card_id"
   end
 
+  create_table "contact_requests", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.text "message"
+    t.bigint "owner_card_id", null: false
+    t.bigint "friend_card_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friend_card_id"], name: "index_contact_requests_on_friend_card_id"
+    t.index ["owner_card_id"], name: "index_contact_requests_on_owner_card_id"
+  end
+
   create_table "emails", force: :cascade do |t|
     t.integer "category", default: 0
     t.string "value"
@@ -79,9 +90,13 @@ ActiveRecord::Schema.define(version: 2021_01_03_100144) do
     t.string "role"
     t.integer "gender"
     t.date "birthday"
+    t.integer "daily_send_request_quota", default: 10
+    t.integer "daily_receive_request_quota", default: 10
+    t.integer "category", default: 0
     t.bigint "user_id", null: false
     t.boolean "public", default: false
     t.boolean "primary", default: false
+    t.boolean "auto_accept_request", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_my_cards_on_user_id"
@@ -121,6 +136,8 @@ ActiveRecord::Schema.define(version: 2021_01_03_100144) do
     t.string "last_name"
     t.string "username"
     t.string "photo_url"
+    t.integer "my_card_quota", default: 20
+    t.integer "contact_quota", default: 100
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
@@ -144,6 +161,8 @@ ActiveRecord::Schema.define(version: 2021_01_03_100144) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "my_cards"
+  add_foreign_key "contact_requests", "my_cards", column: "friend_card_id"
+  add_foreign_key "contact_requests", "my_cards", column: "owner_card_id"
   add_foreign_key "emails", "my_cards"
   add_foreign_key "my_cards", "users"
   add_foreign_key "phones", "my_cards"

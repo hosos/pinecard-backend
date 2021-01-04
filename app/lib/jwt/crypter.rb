@@ -16,6 +16,6 @@ class Jwt::Crypter
     # rescue from all decode errors
   rescue JWT::DecodeError => e
     # raise custom error to be handled by custom handler
-    # raise ExceptionHandler::InvalidToken, e.message
+    raise ExceptionHandler::InvalidToken, e.message
   end
 end

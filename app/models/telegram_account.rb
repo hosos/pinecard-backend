@@ -2,15 +2,17 @@
 #
 # Table name: telegram_accounts
 #
-#  id          :bigint           not null, primary key
-#  first_name  :string
-#  last_name   :string
-#  photo_url   :string
-#  username    :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  telegram_id :string
-#  user_id     :bigint           not null
+#  id            :bigint           not null, primary key
+#  contact_quota :integer          default(100)
+#  first_name    :string
+#  last_name     :string
+#  my_card_quota :integer          default(20)
+#  photo_url     :string
+#  username      :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  telegram_id   :string
+#  user_id       :bigint           not null
 #
 # Indexes
 #
